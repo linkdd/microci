@@ -1,0 +1,33 @@
+version: '2'
+services:
+  redis:
+    image: "redis:3.0-alpine"
+    volumes:
+      - redis:/data
+  api:
+    build: .
+    command: >
+      gunicorn -b 0.0.0.0:8000
+        --access-logfile -
+        --reload
+        microci.web.wsgi:app
+    volumes:
+      - .:/microci
+    ports:
+      - "8000:8000"
+    environment:
+      BROKER: redis://redis
+    links:
+     - redis
+  worker:
+    build: .
+    command: celery worker -l info -A microci.worker
+    volumes:
+      - .:/microci
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      BROKER: redis://redis
+    links:
+     - redis
+volumes:
+  redis:
