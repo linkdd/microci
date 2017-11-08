@@ -85,6 +85,8 @@ def job_runner(job):
         if repo_path is not None:
             rmtree(repo_path)
 
+    db.close()
+
 
 @attr.s(slots=True)
 class Job(object):

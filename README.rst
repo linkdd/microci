@@ -1,7 +1,7 @@
 MicroCI
 =======
 
-Lightweight continuous integration.
+Lightweight self-hosted continuous integration.
 
 Prerequisites
 -------------
