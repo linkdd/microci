@@ -51,7 +51,7 @@ Usage
 -----
 
 Put a file named ``.microci.json`` at the root of your repository, and configure
-the webhook for push events to the right endpoint/
+the webhook for push events to the right endpoint.
 
 If no file is present, the following configuration is assumed:
 
