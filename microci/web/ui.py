@@ -10,6 +10,15 @@ from microci.web import db
 blueprint = Blueprint('ui', __name__)
 
 
+@blueprint.errorhandler(404)
+def not_found(e):
+    return render_template(
+        'error.html',
+        error={'code': 404, 'message': 'Not Found'},
+        obj=e
+    ), 404
+
+
 @blueprint.route('/', defaults={'status': 'all'})
 @blueprint.route('/<status>')
 def index(status):
@@ -36,5 +45,4 @@ def detail(jid):
     if job is None:
         abort(404)
 
-    else:
-        return render_template('detail.html', job=job)
+    return render_template('detail.html', job=job)

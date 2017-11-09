@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MicroCI</title>
+        <meta charset="utf-8" />
+
+        <link rel="stylesheet" href="/static/css/materialize.min.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+        <style type="text/css">
+            .console {
+                background-color: black;
+                color: green;
+                padding: 15px;
+                overflow: scroll;
+            }
+        </style>
+
+        <script type="application/javascript" src="/static/js/jquery.min.js"></script>
+        <script type="application/javascript" src="/static/js/materialize.min.js"></script>
+        <script type="application/javascript" src="/static/js/moment.min.js"></script>
+
+        <script type="application/javascript">
+            $(function() {
+                $('.datetime').each(function() {
+                    var el = $(this);
+                    var datetime = el.data('datetime');
+                    var ago = moment(datetime).fromNow();
+                    el.text(ago);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <nav class="blue darken-4">
+            <div class="nav-wrapper">
+                <a href="/view" class="brand-logo right">MicroCI</a>
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li>
+                        <a href="/view/all">All</a>
+                    </li>
+                    <li {% if "pending" == job.status | jobstatus %}class="active"{% endif %}>
+                        <a href="/view/pending">Pending</a>
+                    </li>
+                    <li {% if "started" == job.status | jobstatus %}class="active"{% endif %}>
+                        <a href="/view/started">Started</a>
+                    </li>
+                    <li {% if "errored" == job.status | jobstatus %}class="active"{% endif %}>
+                        <a href="/view/errored">Errored</a>
+                    </li>
+                    <li {% if "failed" == job.status | jobstatus %}class="active"{% endif %}>
+                        <a href="/view/failed">Failed</a>
+                    </li>
+                    <li {% if "succeed" == job.status | jobstatus %}class="active"{% endif %}>
+                        <a href="/view/succeed">Succeed</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">
+                    JOB #{{ job.id }}: {{ job.commit_msg}}
+
+                    <a class="right waves-effect waves-light" href="{{ job.commit_url }}">
+                        <i class="material-icons">link</i>
+                    </a>
+                </span>
+
+                <hr/>
+
+                <div class="right">
+                    {% if "pending" == job.status | jobstatus %}
+                        <a class="waves-effect waves-light">
+                            <i class="material-icons">more_horiz</i>
+                        </a>
+                    {% elif "started" == job.status | jobstatus %}
+                        <a class="waves-effect waves-light">
+                            <i class="material-icons">loop</i>
+                        </a>
+                    {% elif "errored" == job.status | jobstatus %}
+                        <a class="waves-effect waves-light">
+                            <i class="material-icons">error</i>
+                        </a>
+                    {% elif "failed" == job.status | jobstatus %}
+                        <a class="waves-effect waves-light">
+                            <i class="material-icons">close</i>
+                        </a>
+                    {% elif "succeed" == job.status | jobstatus %}
+                        <a class="waves-effect waves-light">
+                            <i class="material-icons">check</i>
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="right">
+                    <span class="datetime" data-datetime="{{ job.datetime }}"></span> |
+                </div>
+                <p>
+                    <b>Author:</b> {{ job.author }}<br/>
+                    <b>Committer:</b> {{ job.committer }}
+                </p>
+
+                <pre class="console">{{ job.logs }}</pre>
+            </div>
+        </div>
+    </body>
+</html>

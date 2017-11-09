@@ -5,7 +5,7 @@ from microci.web.urls import blueprints
 from microci.web import db
 from microci import config
 
-from flask import Flask
+from flask import Flask, redirect
 import six
 
 
@@ -20,3 +20,8 @@ for prefix, blueprint in six.iteritems(blueprints):
 @app.template_filter('jobstatus')
 def jobstatus(status):
     return JobStatus(status).name.lower()
+
+
+@app.route('/')
+def home():
+    return redirect('/view')

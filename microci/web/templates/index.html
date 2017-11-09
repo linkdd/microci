@@ -22,7 +22,7 @@
         </script>
     </head>
     <body>
-        <nav>
+        <nav class="blue darken-4">
             <div class="nav-wrapper">
                 <a href="/view" class="brand-logo right">MicroCI</a>
                 <ul id="nav-mobile" class="left hide-on-med-and-down">
@@ -71,6 +71,8 @@
                         <i class="material-icons">link</i>
                     </a>
                 </li>
+            {% else %}
+                <li class="collection-item">No jobs scheduled</li>
             {% endfor %}
         </ul>
     </body>
