@@ -16,8 +16,8 @@ Installation
 
    python setup.py install
 
-Usage
------
+Deployment
+----------
 
 MicroCI needs:
 
@@ -32,20 +32,35 @@ See ``docker-compose.yml`` for a simple example of MicroCI infrastructure.
    DEBUG, True, "DEBUG mode for Flask"
    DBURL, "sqlite://microci.db", "Database for jobs persistence"
    BROKER, "redis://localhost", "Broker for jobs scheduling"
-   DOCKER_URL, "unix://var/run/docker.sock", "Docker URL for container's job creation"
-   DOCKER_IMAGE, "debian:latest", "Docker image for job's container"
+   DOCKER_URL, "unix://var/run/docker.sock", "Docker URL for job's container creation"
+   DOCKER_IMAGE, "debian:latest", "Docker image for job's container if not specified"
    SIGNATURE, "secret", "Token for webhooks"
 
 Supported webhooks
 ------------------
 
- * Gogs
+ * Gogs (endpoint: ``/hooks/gogs``)
 
 Coming soon:
 
  * Github
  * Gitlab
  * Bitbucket
+
+Usage
+-----
+
+Put a file named ``.microci.json`` at the root of your repository, and configure
+the webhook for push events to the right endpoint/
+
+If no file is present, the following configuration is assumed:
+
+.. code-block:: javascript
+
+   {
+     "dockerimg": "debian:latest",
+     "command": "/bin/sh microci.sh"
+   }
 
 License
 -------

@@ -11,6 +11,7 @@ from shutil import rmtree
 from uuid import uuid4
 
 import traceback
+import json
 import attr
 import os
 
@@ -34,7 +35,6 @@ def job_runner(job):
 
     container = None
     repo_path = None
-    dockerimg = config.DOCKER_IMAGE
 
     try:
         repo_path = os.path.join(os.getcwd(), 'repos', str(uuid4()))
@@ -47,11 +47,26 @@ def job_runner(job):
         log('[JOB #{0}] git checkout {1}'.format(job.id, job.commit_id))
         repo.checkout_tree(job.commit_id)
 
-        log('[JOB #{0}] docker run {1}'.format(job.id, dockerimg))
+        cfg_path = os.path.join(repo_path, '.microci.json')
+        cfg = {
+            'dockerimg': config.DOCKER_IMAGE,
+            'command': '/bin/sh microci.sh'
+        }
+
+        if os.path.exists(cfg_path):
+            log('[JOB #{0}] Load .microci.json'.format(job.id))
+            try:
+                with open(cfg_path) as f:
+                    cfg.update(json.load(f))
+
+            except Exception:
+                log('[JOB #{0}] {1}'.format(job.id, traceback.format_exc()))
+
+        log('[JOB #{0}] docker run {1}'.format(job.id, cfg['dockerimg']))
         client = DockerClient(base_url=config.DOCKER_URL)
         container = client.containers.run(
-            dockerimg,
-            command='/bin/sh microci.sh',
+            cfg['dockerimg'],
+            command=cfg['command'],
             working_dir='/repo',
             volumes={
                 repo_path: {
