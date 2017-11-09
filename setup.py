@@ -89,4 +89,6 @@ setup(
     test_suite=get_test_suite(),
     install_requires=REQUIREMENTS,
     classifiers=CLASSIFIERS,
+    include_package_data=True,
+    zip_safe=False
 )

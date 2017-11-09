@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MicroCI</title>
+        <meta charset="utf-8" />
+
+        <link rel="stylesheet" href="/static/css/materialize.min.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+        <script type="application/javascript" src="/static/js/jquery.min.js"></script>
+        <script type="application/javascript" src="/static/js/materialize.min.js"></script>
+        <script type="application/javascript" src="/static/js/moment.min.js"></script>
+
+        <script type="application/javascript">
+            $(function() {
+                $('.datetime').each(function() {
+                    var el = $(this);
+                    var datetime = el.data('datetime');
+                    var ago = moment(datetime).fromNow();
+                    el.text(ago);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <nav>
+            <div class="nav-wrapper">
+                <a href="/view" class="brand-logo right">MicroCI</a>
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li {% if active == "all" %}class="active"{% endif %}>
+                        <a href="/view/all">All</a>
+                    </li>
+                    <li {% if active == "pending" %}class="active"{% endif %}>
+                        <a href="/view/pending">Pending</a>
+                    </li>
+                    <li {% if active == "started" %}class="active"{% endif %}>
+                        <a href="/view/started">Started</a>
+                    </li>
+                    <li {% if active == "errored" %}class="active"{% endif %}>
+                        <a href="/view/errored">Errored</a>
+                    </li>
+                    <li {% if active == "failed" %}class="active"{% endif %}>
+                        <a href="/view/failed">Failed</a>
+                    </li>
+                    <li {% if active == "succeed" %}class="active"{% endif %}>
+                        <a href="/view/succeed">Succeed</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <ul class="collection">
+            {% for job in jobs %}
+                <li class="collection-item avatar">
+                    {% if "pending" == job.status | jobstatus %}
+                        <i class="material-icons circle">more_horiz</i>
+                    {% elif "started" == job.status | jobstatus %}
+                        <i class="material-icons circle orange">loop</i>
+                    {% elif "errored" == job.status | jobstatus %}
+                        <i class="material-icons circle black">error</i>
+                    {% elif "failed" == job.status | jobstatus %}
+                        <i class="material-icons circle red">close</i>
+                    {% elif "succeed" == job.status | jobstatus %}
+                        <i class="material-icons circle green">check</i>
+                    {% endif %}
+                    <span class="title">JOB #{{ job.id }}: {{ job.commit_msg }}</span>
+                    <p>
+                        {{ job.author }}, {{ job.committer }}<br/>
+                        <span class="datetime" data-datetime="{{ job.datetime }}"></span>
+                    </p>
+                    <a href="/view/job/{{ job.id }}" class="secondary-content">
+                        <i class="material-icons">link</i>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

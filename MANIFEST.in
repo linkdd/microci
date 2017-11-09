@@ -1,0 +1,2 @@
+recursive-include microci/web/templates *
+recursive-include microci/web/static *
