@@ -2,7 +2,7 @@
 
 from flask import Blueprint, render_template, abort
 
-from microci.web.jobs import fetch as fetch_jobs
+from microci.web.jobs import fetch as fetch_jobs, serialize as serialize_job
 from microci.model.job import JobStatus
 from microci.web import db
 
@@ -45,4 +45,4 @@ def detail(jid):
     if job is None:
         abort(404)
 
-    return render_template('detail.html', job=job)
+    return render_template('detail.html', job=serialize_job(job))

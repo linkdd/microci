@@ -49,23 +49,24 @@
         </nav>
 
         <ul class="collection">
-            {% for job in jobs %}
+            {% for job in jobs|reverse %}
                 <li class="collection-item avatar">
-                    {% if "pending" == job.status | jobstatus %}
+                    {% if "pending" == job.status %}
                         <i class="material-icons circle">more_horiz</i>
-                    {% elif "started" == job.status | jobstatus %}
+                    {% elif "started" == job.status %}
                         <i class="material-icons circle orange">loop</i>
-                    {% elif "errored" == job.status | jobstatus %}
+                    {% elif "errored" == job.status %}
                         <i class="material-icons circle black">error</i>
-                    {% elif "failed" == job.status | jobstatus %}
+                    {% elif "failed" == job.status %}
                         <i class="material-icons circle red">close</i>
-                    {% elif "succeed" == job.status | jobstatus %}
+                    {% elif "succeed" == job.status %}
                         <i class="material-icons circle green">check</i>
                     {% endif %}
-                    <span class="title">JOB #{{ job.id }}: {{ job.commit_msg }}</span>
+                    <span class="title">JOB #{{ job.id }}: {{ job.repository.name }}</span>
                     <p>
+                        {{ job.commit.message }}<br/>
                         {{ job.author }}, {{ job.committer }}<br/>
-                        <span class="datetime" data-datetime="{{ job.datetime }}"></span>
+                        <span class="datetime" data-datetime="{{ job.timestamp }}"></span>
                     </p>
                     <a href="/view/job/{{ job.id }}" class="secondary-content">
                         <i class="material-icons">link</i>

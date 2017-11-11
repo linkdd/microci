@@ -11,6 +11,11 @@ from microci import config
 blueprint = Blueprint('gogs-hooks', __name__)
 
 
+def to_maya(commit):
+    return MayaDT.from_rfc3339(commit['timestamp'])
+
+
+@blueprint.route('', methods=['POST'])
 @blueprint.route('/', methods=['POST'])
 def hook():
     if request.headers.get('X-Gogs-Signature') != config.SIGNATURE:
@@ -22,7 +27,6 @@ def hook():
     except Exception as err:
         return {'error': str(err)}, 400
 
-    to_maya = lambda commit: MayaDT.from_rfc3339(commit['timestamp'])
     commits = sorted(
         event['commits'],
         key=to_maya,
@@ -31,6 +35,7 @@ def hook():
     commit = commits[0]
 
     job = Job(
+        repository=event['repository']['full_name'],
         ssh_url=event['repository']['ssh_url'],
         clone_url=event['repository']['clone_url'],
         commit_id=commit['id'],

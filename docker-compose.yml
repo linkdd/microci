@@ -27,6 +27,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       BROKER: redis://redis
+      REPO_HOST_PATH: /home/linkdd/devel/projects/microci/repos
     links:
      - redis
 volumes:

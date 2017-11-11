@@ -17,11 +17,6 @@ for prefix, blueprint in six.iteritems(blueprints):
     app.register_blueprint(blueprint, url_prefix=prefix)
 
 
-@app.template_filter('jobstatus')
-def jobstatus(status):
-    return JobStatus(status).name.lower()
-
-
 @app.route('/')
 def home():
     return redirect('/view')

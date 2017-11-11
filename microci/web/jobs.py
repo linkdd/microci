@@ -9,25 +9,30 @@ from microci.web import db
 blueprint = Blueprint('jobs', __name__)
 
 
+def serialize(job):
+    return {
+        'id': job.id,
+        'repository': {
+            'name': job.repository,
+            'ssh': job.ssh_url,
+            'clone': job.clone_url
+        },
+        'commit': {
+            'id': job.commit_id,
+            'message': job.commit_msg,
+            'url': job.commit_url
+        },
+        'author': job.author,
+        'committer': job.committer,
+        'timestamp': job.datetime,
+        'logs': job.logs,
+        'status': JobStatus(job.status).name.lower()
+    }
+
+
 def fetch(db, filter):
     for job in db(filter).select():
-        yield {
-            'id': job.id,
-            'repository': {
-                'ssh': job.ssh_url,
-                'clone': job.clone_url
-            },
-            'commit': {
-                'id': job.commit_id,
-                'message': job.commit_msg,
-                'url': job.commit_url
-            },
-            'author': job.author,
-            'committer': job.committer,
-            'timestamp': job.datetime,
-            'logs': job.logs,
-            'status': JobStatus(job.status).name
-        }
+        yield serialize(job)
 
 
 def fetch_status(db, status):

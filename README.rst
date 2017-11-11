@@ -35,11 +35,22 @@ See ``docker-compose.yml`` for a simple example of MicroCI infrastructure.
    DOCKER_URL, "unix://var/run/docker.sock", "Docker URL for job's container creation"
    DOCKER_IMAGE, "debian:latest", "Docker image for job's container if not specified"
    SIGNATURE, "secret", "Token for webhooks"
+   SSH_USERNAME, "git", "SSH username when cloning repository"
+   SSH_PUBKEY, "$HOME/.ssh/id_rsa.pub", "Path to SSH public key"
+   SSH_PRIVKEY, "$HOME/.ssh/id_rsa", "Path to SSH private key"
+   SSH_PASSPHRASE, "''", "Passphrase for SSH private key (empty if none)"
+   REPO_HOST_PATH, "''", "Path to the folder containing the repositories"
+
+If the worker is running in a container, bind a folder from the host to ``/microci/repos``.
+This is were the git repositories are cloned.
+
+Then set the environment variable ``REPO_HOST_PATH`` to that folder. The worker will
+use it to bind the repository in the job's container.
 
 Supported webhooks
 ------------------
 
- * Gogs (endpoint: ``/hooks/gogs``)
+ * Gogs (endpoint: ``/hooks/gogs/``)
 
 Coming soon:
 

@@ -39,19 +39,19 @@
                     <li>
                         <a href="/view/all">All</a>
                     </li>
-                    <li {% if "pending" == job.status | jobstatus %}class="active"{% endif %}>
+                    <li {% if "pending" == job.status %}class="active"{% endif %}>
                         <a href="/view/pending">Pending</a>
                     </li>
-                    <li {% if "started" == job.status | jobstatus %}class="active"{% endif %}>
+                    <li {% if "started" == job.status %}class="active"{% endif %}>
                         <a href="/view/started">Started</a>
                     </li>
-                    <li {% if "errored" == job.status | jobstatus %}class="active"{% endif %}>
+                    <li {% if "errored" == job.status %}class="active"{% endif %}>
                         <a href="/view/errored">Errored</a>
                     </li>
-                    <li {% if "failed" == job.status | jobstatus %}class="active"{% endif %}>
+                    <li {% if "failed" == job.status %}class="active"{% endif %}>
                         <a href="/view/failed">Failed</a>
                     </li>
-                    <li {% if "succeed" == job.status | jobstatus %}class="active"{% endif %}>
+                    <li {% if "succeed" == job.status %}class="active"{% endif %}>
                         <a href="/view/succeed">Succeed</a>
                     </li>
                 </ul>
@@ -61,9 +61,9 @@
         <div class="card">
             <div class="card-content">
                 <span class="card-title">
-                    JOB #{{ job.id }}: {{ job.commit_msg}}
+                    JOB #{{ job.id }}: {{ job.repository.name }}
 
-                    <a class="right waves-effect waves-light" href="{{ job.commit_url }}">
+                    <a class="right waves-effect waves-light" href="{{ job.commit.url }}">
                         <i class="material-icons">link</i>
                     </a>
                 </span>
@@ -71,32 +71,33 @@
                 <hr/>
 
                 <div class="right">
-                    {% if "pending" == job.status | jobstatus %}
+                    {% if "pending" == job.status %}
                         <a class="waves-effect waves-light">
                             <i class="material-icons">more_horiz</i>
                         </a>
-                    {% elif "started" == job.status | jobstatus %}
+                    {% elif "started" == job.status %}
                         <a class="waves-effect waves-light">
                             <i class="material-icons">loop</i>
                         </a>
-                    {% elif "errored" == job.status | jobstatus %}
+                    {% elif "errored" == job.status %}
                         <a class="waves-effect waves-light">
                             <i class="material-icons">error</i>
                         </a>
-                    {% elif "failed" == job.status | jobstatus %}
+                    {% elif "failed" == job.status %}
                         <a class="waves-effect waves-light">
                             <i class="material-icons">close</i>
                         </a>
-                    {% elif "succeed" == job.status | jobstatus %}
+                    {% elif "succeed" == job.status %}
                         <a class="waves-effect waves-light">
                             <i class="material-icons">check</i>
                         </a>
                     {% endif %}
                 </div>
                 <div class="right">
-                    <span class="datetime" data-datetime="{{ job.datetime }}"></span> |
+                    <span class="datetime" data-datetime="{{ job.timestamp }}"></span> |
                 </div>
                 <p>
+                    {{ job.commit.message }}<br/>
                     <b>Author:</b> {{ job.author }}<br/>
                     <b>Committer:</b> {{ job.committer }}
                 </p>

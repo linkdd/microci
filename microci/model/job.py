@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
 
-from enum import IntEnum, auto
+from enum import IntEnum
 from pydal import Field
 
 
 class JobStatus(IntEnum):
-    PENDING = auto()
-    STARTED = auto()
-    ERRORED = auto()
-    FAILED = auto()
-    SUCCEED = auto()
+    PENDING = 0
+    STARTED = 1
+    ERRORED = 2
+    FAILED = 3
+    SUCCEED = 4
 
 
 def make_job(db):
     db.define_table(
         'jobs',
+        Field('repository', type='string', length=255),
         Field('ssh_url', type='string', length=512),
         Field('clone_url', type='string', length=512),
         Field('commit_id', type='string', length=255),
